@@ -1,4 +1,7 @@
-$(function() {
+var divScanner = document.getElementById("scannerDiv");
+divScanner.style.display = "none";
+
+function Scanner () {
     var resultCollector = Quagga.ResultCollector.create({
         capture: true,
         capacity: 20,
@@ -242,7 +245,7 @@ $(function() {
                 halfSample: true
             },
             numOfWorkers: 2,
-            frequency: 10,
+            frequency: 2,
             decoder: {
                 readers : [{
                     format: "code_128_reader",
@@ -282,16 +285,25 @@ $(function() {
 
     Quagga.onDetected(function(result) {
         var code = result.codeResult.code;
-
+        console.log("CODE " + code);
         if (App.lastResult !== code) {
             App.lastResult = code;
             var $node = null, canvas = Quagga.canvas.dom.image;
 
-            $node = $('<li><div class="thumbnail"><div class="imgWrapper"><img /></div><div class="caption"><h4 class="code"></h4></div></div></li>');
-            $node.find("img").attr("src", canvas.toDataURL());
+            $node = $('<li><div class="thumbnail"><div class="caption"><h4 class="code"></h4></div></div></li>');
             $node.find("h4.code").html(code);
             $("#result_strip ul.thumbnails").prepend($node);
+            Quagga.stop();
+            divScanner.style.display = "none";
         }
     });
 
-});
+}
+
+function toggleScanner() {
+    divScanner.style.display = "block";
+    Scanner();
+}
+
+var btnScanner = document.getElementById("scannerBtn");
+

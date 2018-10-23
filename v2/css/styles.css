@@ -115,7 +115,6 @@ footer {
 }
 
 #result_strip > ul > li {
-  display: inline-block;
   vertical-align: middle;
   width: 160px;
 }
