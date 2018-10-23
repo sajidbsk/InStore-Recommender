@@ -2,6 +2,23 @@ var divScanner = document.getElementById("scannerDiv");
 divScanner.style.display = "none";
 
 var basket = [];
+var dict = {3338370119 : "Eggs", 3338370178 : "Milk", 6148301478 : "Bread", 21937800000 : "Butter"};
+
+function predictCode () {
+    if (basket.includes(3338370119) && basket.length == 1) {
+        return [3338370178, 6148301478];
+    } else if (basket.includes(21937800000) && basket.length == 1) {
+        return [3338370119, 6148301478];
+    } else if (basket.includes(3338370178) && basket.length == 1) {
+        return [3338370119, 6148301478];
+    } else if (basket.includes(6148301478) && basket.length == 1) {
+        return [3338370119, 3338370178];
+    } else if (basket.includes(21937800000) && basket.includes(3338370119) &&basket.length == 2) {
+        return [21937800000, 3338370178];
+    } else {
+        return [3338370178, 6148301478, 21937800000, 3338370119]
+    }
+}
 
 function Scanner () {
     var resultCollector = Quagga.ResultCollector.create({
@@ -296,8 +313,14 @@ function Scanner () {
                 var $node = null, canvas = Quagga.canvas.dom.image;
 
                 $node = $('<li><div class="thumbnail"><div class="caption"><h4 class="code"></h4></div></div></li>');
-                $node.find("h4.code").html(code);
-            $("#result_strip ul.thumbnails").prepend($node);
+                $node.find("h4.code").html(dict[code]);
+                $("#result_strip ul.thumbnails").prepend($node);
+                predictions = predictCode();
+                predictions.forEach(function(predict) {
+                    $node = $('<li><div class="thumbnail"><div class="caption"><h4 class="code"></h4></div></div></li>');
+                    $node.find("h4.code").html(dict[predict]);
+                    $("#recommend_strip ul.thumbnails").prepend($node);
+                });
             }
             console.log("Basket: " + basket);
             Quagga.stop();
