@@ -1,6 +1,8 @@
 var divScanner = document.getElementById("scannerDiv");
 divScanner.style.display = "none";
 
+var basket = [];
+
 function Scanner () {
     var resultCollector = Quagga.ResultCollector.create({
         capture: true,
@@ -288,11 +290,16 @@ function Scanner () {
         console.log("CODE " + code);
         if (App.lastResult !== code) {
             App.lastResult = code;
-            var $node = null, canvas = Quagga.canvas.dom.image;
+            if (!basket.includes(parseInt(code))){
+                basket.push(parseInt(code));
+                basket.sort();
+                var $node = null, canvas = Quagga.canvas.dom.image;
 
-            $node = $('<li><div class="thumbnail"><div class="caption"><h4 class="code"></h4></div></div></li>');
-            $node.find("h4.code").html(code);
+                $node = $('<li><div class="thumbnail"><div class="caption"><h4 class="code"></h4></div></div></li>');
+                $node.find("h4.code").html(code);
             $("#result_strip ul.thumbnails").prepend($node);
+            }
+            console.log("Basket: " + basket);
             Quagga.stop();
             divScanner.style.display = "none";
         }
